@@ -1,0 +1,17 @@
+{
+  "name": "com.seechak.sdk",
+  "displayName": "SEECHAK",
+  "version": "0.0.1",
+  "url": "https://seechak.com",
+  "author": {
+    "name": "SEECHAK",
+    "email": "help@seechak.com",
+    "url": "https://seechak.com"
+  },
+  "description": "SDK for SEECHAK",
+  "unity": "2022.3",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "2.0.0"
+  },
+  "vpmDependencies ": {}
+}

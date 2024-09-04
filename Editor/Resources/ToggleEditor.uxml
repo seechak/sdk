@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Template name="Description" src="./Description.uxml" />
+    <ui:Instance template="Description" name="Description" />
+</ui:UXML>
