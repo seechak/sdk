@@ -49,6 +49,8 @@ namespace SEECHAK.SDK.Editor
 
         private void Setup()
         {
+            API.Client.BaseURL = Config.Value.BaseURL;
+
             minSize = new Vector2(500, 550);
             maxSize = new Vector2(500, 550);
 
