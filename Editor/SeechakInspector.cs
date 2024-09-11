@@ -5,8 +5,6 @@ using UnityEngine.UIElements;
 
 namespace SEECHAK.SDK.Editor
 {
-    using SDK = SDK.Core.SDK;
-
     public abstract class SeechakInspector : UnityEditor.Editor
     {
         private readonly Locale locale = new();
@@ -32,7 +30,6 @@ namespace SEECHAK.SDK.Editor
 
             locale.SetupLanguageDropdown(Inspector, "LanguageDropdown");
             SetComponentName();
-            SetVersionLabel();
             return Inspector;
         }
 
@@ -56,12 +53,6 @@ namespace SEECHAK.SDK.Editor
             var componentName = Inspector.Q<Label>("ComponentName");
             var component = (IComponent) target;
             if (component != null) componentName.text = component.Name;
-        }
-
-        private void SetVersionLabel()
-        {
-            var versionLabel = Inspector.Q<Label>("VersionLabel");
-            versionLabel.text = SDK.Version;
         }
 
         protected void CloneTreeFromResource(string path)

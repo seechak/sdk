@@ -2,7 +2,5 @@
     <ui:VisualElement style="flex-grow: initial; flex-direction: row; margin-top: 8px; height: 25px; flex-shrink: initial; margin-bottom: 8px;">
         <ui:Label tabindex="-1" text="Language" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: middle-right;" />
         <ui:DropdownField name="LanguageDropdown" />
-        <ui:VisualElement name="VisualElement" style="flex-grow: 1;" />
-        <ui:Label tabindex="-1" text="VERSION" parse-escape-sequences="true" display-tooltip-when-elided="true" name="VersionLabel" style="font-size: 10px; -unity-text-align: lower-right;" />
     </ui:VisualElement>
 </ui:UXML>

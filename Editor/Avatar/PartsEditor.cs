@@ -18,9 +18,9 @@ namespace SEECHAK.SDK.Editor.Avatar
 
             var togglesVisualElement = Inspector.Q<VisualElement>("TogglesVisualElement");
 
-            var kinds = new List<string> {"hair", "top", "bottom", "shoes", "accessory", "kemomimi", "tail"};
-            var englishKinds = new List<string> {"Hair", "Top", "Bottom", "Shoes", "Accessory", "Kemomimi", "Tail"};
-            var koreanKinds = new List<string> {"헤어", "상의", "하의", "신발", "액세서리", "케모미미", "꼬리"};
+            var kinds = new List<string> {"hair", "top", "bottom", "shoes", "hat", "tail"};
+            var englishKinds = new List<string> {"Hair", "Top", "Bottom", "Shoes", "Hat", "Tail"};
+            var koreanKinds = new List<string> {"헤어", "상의", "하의", "신발", "모자", "꼬리"};
             for (var index = 0; index < kinds.Count; index++)
             {
                 var kind = kinds[index];
@@ -61,8 +61,8 @@ namespace SEECHAK.SDK.Editor.Avatar
 
             var descriptionLabel = Inspector.Q<Label>("DescriptionLabel");
             L(
-                "시착 시 시착하려는 에셋의 착용 부위에 따라 적절히 비활성화 됩니다.",
-                "It will be disabled appropriately depending on the part of the asset you want to wear.",
+                "시착 시 에셋에 지정된 에셋 종류와 하나라도 겹치는 경우 비활성화됩니다.",
+                "If the asset has the same kind as the asset specified in the asset, it will be disabled.",
                 s => { descriptionLabel.text = s; }
             );
         }
