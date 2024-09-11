@@ -11,10 +11,9 @@ namespace SEECHAK.SDK.Editor.Asset
     [CustomEditor(typeof(SetParent))]
     public class SetParentEditor : SeechakInspector
     {
-        private ObjectField targetBoneObjectField;
-        private TextField targetBonePathTextField;
-        private Label pathErrorLabel;
-        private SerializedProperty pathProperty;
+        private Label _pathErrorLabel;
+        private ObjectField _targetBoneObjectField;
+        private TextField _targetBonePathTextField;
 
         private void SetObjectField(string path, VRCAvatarDescriptor avatar)
         {
@@ -22,52 +21,52 @@ namespace SEECHAK.SDK.Editor.Asset
 
             if (armature == null)
             {
-                pathErrorLabel.text = LL(en: "Failed to find the armature.", ko: "아바타의 Armature를 찾지 못했습니다.");
+                _pathErrorLabel.text = LL(en: "Failed to find the armature.", ko: "아바타의 Armature를 찾지 못했습니다.");
                 return;
             }
-            targetBoneObjectField.style.display = DisplayStyle.Flex;
-            targetBonePathTextField.style.display = DisplayStyle.None;
+
+            _targetBoneObjectField.style.display = DisplayStyle.Flex;
+            _targetBonePathTextField.style.display = DisplayStyle.None;
             if (path != null && path.Length > 0)
             {
                 var bone = armature.GetByPath(path);
                 if (bone == null)
                 {
-                    pathErrorLabel.style.display = DisplayStyle.Flex;
-                    pathErrorLabel.text = LL(
-                        ko: $"다음 경로의 본을 찾지 못했습니다: {path}",
-                        en: $"Failed to find the bone at the following path: {path}"
+                    _pathErrorLabel.style.display = DisplayStyle.Flex;
+                    _pathErrorLabel.text = LL(
+                        $"다음 경로의 본을 찾지 못했습니다: {path}",
+                        $"Failed to find the bone at the following path: {path}"
                     );
                 }
                 else
                 {
-                    targetBoneObjectField.SetValueWithoutNotify(bone);
+                    _targetBoneObjectField.SetValueWithoutNotify(bone);
                 }
             }
         }
 
         private void SetTextField(string path)
         {
-            targetBonePathTextField.style.display = DisplayStyle.Flex;
-            targetBoneObjectField.style.display = DisplayStyle.None;
-            if (path != null && path.Length > 0)
-            {
-                targetBonePathTextField.SetValueWithoutNotify(path);
-            }
+            _targetBonePathTextField.style.display = DisplayStyle.Flex;
+            _targetBoneObjectField.style.display = DisplayStyle.None;
+            if (path != null && path.Length > 0) _targetBonePathTextField.SetValueWithoutNotify(path);
         }
 
         private void UpdateEditorFields()
         {
-            targetBoneObjectField.style.display = DisplayStyle.None;
-            targetBonePathTextField.style.display = DisplayStyle.None;
-            pathErrorLabel.style.display = DisplayStyle.None;
+            _targetBoneObjectField.style.display = DisplayStyle.None;
+            _targetBonePathTextField.style.display = DisplayStyle.None;
+            _pathErrorLabel.style.display = DisplayStyle.None;
 
-            targetBoneObjectField.SetValueWithoutNotify(null);
-            targetBonePathTextField.SetValueWithoutNotify("");
+            _targetBoneObjectField.SetValueWithoutNotify(null);
+            _targetBonePathTextField.SetValueWithoutNotify("");
 
-            var avatar = target != null ? (target as SetParent)?.transform.FindAvatar() : null;
-            var path = pathProperty.stringValue;
-            if (avatar == null) SetTextField(path);
-            else SetObjectField(path, avatar);
+            var setParent = target as SetParent;
+            if (setParent == null) return;
+
+            var avatar = setParent.transform.FindAvatar();
+            if (avatar == null) SetTextField(setParent._path);
+            else SetObjectField(setParent._path, avatar);
         }
 
         public override void SetupInspector()
@@ -75,59 +74,56 @@ namespace SEECHAK.SDK.Editor.Asset
             CloneTreeFromResource("SetParentEditor");
             var descriptionLabel = Inspector.Q<Label>("DescriptionLabel");
             L(
-                ko: "이 컴포넌트가 있는 GameObject는 시착 시 지정된 본의 자식으로 설정됩니다.",
-                en: "The GameObject with this component will be set as a child of the specified bone when user try on.",
-                setter: (s) =>
-                {
-                    descriptionLabel.text = s;
-                }
+                "이 컴포넌트가 있는 GameObject는 시착 시 지정된 본의 자식으로 설정됩니다.",
+                "The GameObject with this component will be set as a child of the specified bone when user try on.",
+                s => { descriptionLabel.text = s; }
             );
 
-            targetBoneObjectField = Inspector.Q<ObjectField>("TargetBoneObjectField");
-            targetBonePathTextField = Inspector.Q<TextField>("TargetBonePathTextField");
-            pathErrorLabel = Inspector.Q<Label>("PathErrorLabel");
-
-            pathProperty = serializedObject.FindProperty("_path");
+            _targetBoneObjectField = Inspector.Q<ObjectField>("TargetBoneObjectField");
+            _targetBonePathTextField = Inspector.Q<TextField>("TargetBonePathTextField");
+            _pathErrorLabel = Inspector.Q<Label>("PathErrorLabel");
 
             UpdateEditorFields();
-            ;
 
             EditorApplication.hierarchyChanged += Callback;
-            targetBoneObjectField.RegisterValueChangedCallback((e) =>
+            _targetBoneObjectField.RegisterValueChangedCallback(e =>
             {
-                var bone = (Transform)e.newValue;
+                var setParent = target as SetParent;
+                if (setParent == null) return;
+
+                var bone = (Transform) e.newValue;
                 if (bone == null)
                 {
-                    pathProperty.stringValue = "";
+                    serializedObject.FindProperty(nameof(setParent._path)).stringValue = "";
                     serializedObject.ApplyModifiedProperties();
                     UpdateEditorFields();
                     return;
                 }
 
-                if (target != null)
+                var avatar = setParent.transform.FindAvatar();
+                if (avatar == null) return;
+                var armature = avatar.transform.FindArmature();
+                if (armature == null) return;
+                if (!bone.IsChildOf(armature))
                 {
-                    var setParent = target as SetParent;
-                    var avatar = setParent.transform.FindAvatar();
-                    var armature = avatar.transform.FindArmature();
-                    if (!bone.IsChildOf(armature))
-                    {
-                        EditorUtility.DisplayDialog("Error", LL(ko: "본은 반드시 아바타의 Armature의 자식이어야 합니다.",
-                                                                en: "The bone must be a child of the armature."),
-                                                                "OK");
+                    EditorUtility.DisplayDialog("Error", LL("본은 반드시 아바타의 Armature의 자식이어야 합니다.",
+                            "The bone must be a child of the armature."),
+                        "OK");
 
-                        targetBoneObjectField.SetValueWithoutNotify(e.previousValue);
-                        return;
-                    }
-
-                    serializedObject.FindProperty("path").stringValue = armature.PathOf(bone);
-                    serializedObject.ApplyModifiedProperties();
-                    UpdateEditorFields();
+                    _targetBoneObjectField.SetValueWithoutNotify(e.previousValue);
+                    return;
                 }
+
+                var path = armature.PathOf(bone);
+                if (path == null) return;
+                serializedObject.FindProperty(nameof(setParent._path)).stringValue = path;
+                serializedObject.ApplyModifiedProperties();
+                UpdateEditorFields();
             });
 
 
-            bool labelChanged = false;
-            targetBonePathTextField.RegisterValueChangedCallback(e =>
+            var labelChanged = false;
+            _targetBonePathTextField.RegisterValueChangedCallback(e =>
             {
                 if (labelChanged)
                 {
@@ -135,7 +131,10 @@ namespace SEECHAK.SDK.Editor.Asset
                     UpdateEditorFields();
                     return;
                 }
-                pathProperty.stringValue = e.newValue;
+
+                var setParent = target as SetParent;
+                if (setParent == null) return;
+                serializedObject.FindProperty(nameof(setParent._path)).stringValue = e.newValue;
                 serializedObject.ApplyModifiedProperties();
                 UpdateEditorFields();
             });
@@ -143,19 +142,16 @@ namespace SEECHAK.SDK.Editor.Asset
             L(
                 en: "Target Bone",
                 ko: "대상 본",
-                setter: (s) =>
-                {
-                    targetBoneObjectField.label = s;
-                }
+                setter: s => { _targetBoneObjectField.label = s; }
             );
 
             L(
                 en: "Target Bone Path",
                 ko: "대상 본 경로",
-                setter: (s) =>
+                setter: s =>
                 {
                     labelChanged = true;
-                    targetBonePathTextField.label = s;
+                    _targetBonePathTextField.label = s;
                 }
             );
 
@@ -166,6 +162,7 @@ namespace SEECHAK.SDK.Editor.Asset
                     EditorApplication.hierarchyChanged -= Callback;
                     return;
                 }
+
                 UpdateEditorFields();
             }
         }

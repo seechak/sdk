@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement style="flex-grow: initial; min-height: auto; min-width: auto; flex-shrink: 1; flex-direction: row; height: 24px; justify-content: space-between;">
+        <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="SourceDropdownField" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-grow: 0; max-width: none; width: 30%;" />
+        <ui:TextField picking-mode="Ignore" name="SourceTextField" style="width: 30%; display: none;" />
+        <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="TargetDropdownField" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-grow: 0; width: 30%;" />
+        <ui:TextField picking-mode="Ignore" name="TargetTextField" style="width: 30%; display: none;" />
+        <ui:FloatField value="0" name="WeightFloatField" style="flex-grow: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 30%;" />
+    </ui:VisualElement>
+</ui:UXML>

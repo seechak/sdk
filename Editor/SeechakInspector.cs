@@ -9,8 +9,8 @@ namespace SEECHAK.SDK.Editor
 
     public abstract class SeechakInspector : UnityEditor.Editor
     {
-        protected VisualElement Inspector { get; private set; }
         private readonly Locale locale = new();
+        protected VisualElement Inspector { get; private set; }
 
         public void OnEnable()
         {
@@ -46,14 +46,16 @@ namespace SEECHAK.SDK.Editor
             return locale.LL(ko, en);
         }
 
+        public void LLL(Action<Language> setter)
+        {
+            locale.LLL(setter);
+        }
+
         private void SetComponentName()
         {
             var componentName = Inspector.Q<Label>("ComponentName");
-            var component = (IComponent)target;
-            if (component != null)
-            {
-                componentName.text = component.Name;
-            }
+            var component = (IComponent) target;
+            if (component != null) componentName.text = component.Name;
         }
 
         private void SetVersionLabel()

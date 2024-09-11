@@ -53,8 +53,12 @@ namespace SEECHAK.SDK.Editor
             var path = EditorUtility.SaveFilePanel("Save Asset", Application.dataPath, "Assets", "zip");
             if (string.IsNullOrEmpty(path)) return;
 
-            var tempFilePath = Temp.GetPath("Asset.zip");
-            if (File.Exists(tempFilePath)) AssetDatabase.DeleteAsset(tempFilePath);
+            var tempFilePath = Path.Combine(Application.dataPath, "../Temp/Asset.zip");
+            var tempFileDirectory = Path.GetDirectoryName(tempFilePath);
+            if (tempFileDirectory != null && !Directory.Exists(tempFileDirectory))
+                Directory.CreateDirectory(tempFileDirectory);
+            if (File.Exists(tempFilePath)) File.Delete(tempFilePath);
+
             using (var archive = ZipFile.Open(tempFilePath, ZipArchiveMode.Create))
             {
                 foreach (var obj in objects)

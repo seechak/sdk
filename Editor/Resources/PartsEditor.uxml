@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Template name="Description" src="project://database/Packages/com.seechak.sdk/Editor/Resources/Description.uxml?fileID=9197481963319205126&amp;guid=2f0536b0feb7f7f4583e2a0fd4ea8dec&amp;type=3#Description" />
+    <ui:Instance template="Description" name="Description" />
+    <ui:VisualElement name="TogglesVisualElement" style="flex-grow: initial; margin-left: 8px; margin-right: 8px; margin-top: 8px; margin-bottom: 8px;" />
+</ui:UXML>

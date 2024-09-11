@@ -78,6 +78,12 @@ namespace SEECHAK.SDK.Editor
             };
         }
 
+        public void LLL(Action<Language> setter)
+        {
+            setter(Language);
+            LanguageChanged += setter;
+        }
+
         public void SetupLanguageDropdown(VisualElement element, string name)
         {
             var languageDropdown = element.Q<DropdownField>(name);
