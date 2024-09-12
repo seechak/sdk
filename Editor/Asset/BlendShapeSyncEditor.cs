@@ -86,8 +86,8 @@ namespace SEECHAK.SDK
             CloneTreeFromResource("BlendShapeSyncEditor");
             var descriptionLabel = Inspector.Q<Label>("DescriptionLabel");
             L(
-                "소스 SkinnedMeshRenderer의 BlendShape 값을 이 컴포넌트가 부착된 오브젝트의 SkinnedMeshRenderer에 동기화합니다.",
-                "Synchronizes the BlendShape values of the source SkinnedMeshRenderer to the SkinnedMeshRenderer of the object this component is attached to.",
+                "원본 SkinnedMeshRenderer의 BlendShape 값을 이 컴포넌트가 부착된 오브젝트의 SkinnedMeshRenderer에 동기화합니다.\n기본값과 가중치를 조정하여 0에서 1까지의 값을 반대로 1에서 0까지 설정하는 등의 특수한 동작을 설정할 수 있습니다.\n\n",
+                "It synchronizes the BlendShape values from the original SkinnedMeshRenderer to the SkinnedMeshRenderer attached to this component's object.\nYou can set specific behaviors, such as adjusting the default values and weights to reverse a value from 0 to 1 to 1 to 0.\n\n",
                 s => { descriptionLabel.text = s; }
             );
 
@@ -176,12 +176,14 @@ namespace SEECHAK.SDK
                 var elementProperty = blendShapesProperty.GetArrayElementAtIndex(i);
                 var sourceProperty = elementProperty.FindPropertyRelative(nameof(BlendShapeSync.BlendShape._source));
                 var targetProperty = elementProperty.FindPropertyRelative(nameof(BlendShapeSync.BlendShape._target));
+                var baseProperty = elementProperty.FindPropertyRelative(nameof(BlendShapeSync.BlendShape._base));
                 var weightProperty = elementProperty.FindPropertyRelative(nameof(BlendShapeSync.BlendShape._weight));
 
                 var sourceDropdownField = element.Q<DropdownField>("SourceDropdownField");
                 var targetDropdownField = element.Q<DropdownField>("TargetDropdownField");
                 var sourceTextField = element.Q<TextField>("SourceTextField");
                 var targetTextField = element.Q<TextField>("TargetTextField");
+                var baseFloatField = element.Q<FloatField>("BaseFloatField");
                 var weightFloatField = element.Q<FloatField>("WeightFloatField");
 
                 var blendShapeSync = target as BlendShapeSync;
@@ -244,10 +246,19 @@ namespace SEECHAK.SDK
                     serializedObject.ApplyModifiedProperties();
                 });
 
-                weightFloatField.value = Mathf.Clamp(weightProperty.floatValue, 0f, 1f);
-                weightFloatField.RegisterValueChangedCallback(e =>
+                baseFloatField.value = Mathf.Clamp(baseProperty.floatValue, 0f, 1f);
+                baseFloatField.RegisterValueChangedCallback(e =>
                 {
                     var value = Mathf.Clamp(e.newValue, 0f, 1f);
+                    baseProperty.floatValue = value;
+                    baseFloatField.value = value;
+                    serializedObject.ApplyModifiedProperties();
+                });
+
+                weightFloatField.value = Mathf.Clamp(weightProperty.floatValue, -1f, 1f);
+                weightFloatField.RegisterValueChangedCallback(e =>
+                {
+                    var value = Mathf.Clamp(e.newValue, -1f, 1f);
                     weightProperty.floatValue = value;
                     weightFloatField.value = value;
                     serializedObject.ApplyModifiedProperties();
@@ -267,13 +278,13 @@ namespace SEECHAK.SDK
 
             L(
                 en: "Source Renderer",
-                ko: "소스 렌더러",
+                ko: "원본 렌더러",
                 setter: s => { _sourceRendererObjectField.label = s; }
             );
 
             L(
                 en: "Source Renderer Path",
-                ko: "소스 렌더러 경로",
+                ko: "원본 렌더러 경로",
                 setter: s =>
                 {
                     labelChanged = true;
@@ -301,7 +312,7 @@ namespace SEECHAK.SDK
 
             L(
                 en: "Weight",
-                ko: "가중치",
+                ko: "기본 값+(원본 값)\u00d7가중치",
                 setter: s => { weightLabel.text = s; }
             );
 
