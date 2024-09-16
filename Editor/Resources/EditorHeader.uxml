@@ -1,8 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="flex-grow: initial; flex-shrink: initial; flex-basis: initial; align-items: stretch; justify-content: center; margin-right: 0; margin-left: 0; padding-right: 9px; padding-left: 8px;">
-        <ui:VisualElement style="flex-grow: 1; flex-basis: auto; flex-shrink: 1; margin-left: 0; padding-left: 16px; padding-right: 16px; margin-top: 8px; margin-bottom: 8px; padding-top: 8px; padding-bottom: 8px; border-top-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-bottom-left-radius: 8px; margin-right: 0; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);">
-            <ui:Label tabindex="-1" text="SEECHAK SDK" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; -unity-font-style: bold; font-size: 20px; margin-bottom: 0; margin-top: 0; background-color: rgba(255, 255, 255, 0);" />
-            <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ComponentName" style="-unity-text-align: upper-center; margin-bottom: 0; font-size: 12px;" />
-        </ui:VisualElement>
-    </ui:VisualElement>
-</ui:UXML>

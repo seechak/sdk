@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="flex-grow: initial; flex-direction: row; margin-top: 8px; height: 25px; flex-shrink: initial; margin-bottom: 8px;">
-        <ui:Label tabindex="-1" text="Language" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: middle-right;" />
-        <ui:DropdownField name="LanguageDropdown" />
-    </ui:VisualElement>
-</ui:UXML>

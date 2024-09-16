@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="Error" style="flex-grow: 1; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; display: flex;">
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; background-color: rgba(255, 255, 255, 0.08); border-top-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-bottom-left-radius: 8px; min-height: 300px;">
+            <ui:Label tabindex="-1" text="Message" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ErrorMessageLabel" style="white-space: normal;" />
+        </ui:VisualElement>
+        <ui:Button text="Reload" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ReloadButton" style="flex-grow: 0; margin-top: 8px; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Login" style="flex-grow: 1; display: none; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px;">
+        <ui:Button text="Get Login Code" parse-escape-sequences="true" display-tooltip-when-elided="true" name="GetLoginCodeButton" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 8px; padding-top: 8px; padding-bottom: 8px;" />
+        <ui:TextField picking-mode="Ignore" label="Login Code" name="CodeTextField" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: middle-left; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: 24px;" />
+        <ui:VisualElement style="flex-grow: 1; min-height: 30px;" />
+        <ui:Button text="Login" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LoginButton" style="margin-top: 8px; margin-right: 0; margin-bottom: 0; margin-left: 0; min-height: auto; padding-top: 8px; padding-bottom: 8px;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Main" style="flex-grow: 1; display: none; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px;">
+        <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between; margin-bottom: 32px; border-top-left-radius: 4px; border-bottom-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; text-overflow: clip; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; overflow: hidden; height: 32px;">
+            <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ShowUploadAvatarButton" style="flex-grow: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-color: rgb(84, 84, 84); border-right-color: rgb(84, 84, 84); border-top-color: rgb(84, 84, 84); border-bottom-color: rgb(84, 84, 84); height: 32px;" />
+            <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ShowUploadAssetButton" focusable="true" enable-rich-text="true" style="flex-grow: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(84, 84, 84); border-right-color: rgb(84, 84, 84); border-top-color: rgb(84, 84, 84); border-bottom-color: rgb(84, 84, 84); height: 32px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="UploadAvatar" style="flex-grow: 1; display: none;">
+            <ui:DropdownField label="Avatar" name="AvatarDropdownField" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-bottom: 0; padding-top: 0; padding-right: 0; padding-left: 0; -unity-text-align: middle-left; min-height: 24px; visibility: visible;" />
+            <ui:Label tabindex="-1" text="Avatar Info" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AvatarInfoLabel" style="font-size: 16px; -unity-font-style: bold; margin-bottom: 4px; margin-top: 16px;" />
+            <ui:TextField picking-mode="Ignore" label="Name" name="AvatarNameTextField" style="margin-top: 0; margin-right: 0; margin-bottom: 8px; margin-left: 0; -unity-text-align: middle-left; max-height: none; height: 24px;" />
+            <ui:Label tabindex="-1" text="Last Update: " parse-escape-sequences="true" display-tooltip-when-elided="true" name="LastUpdateLabel" style="margin-bottom: 8px;" />
+            <ui:Label tabindex="-1" text="Thumbnail" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ThumbnailLabel" style="font-size: 16px; -unity-font-style: bold; margin-bottom: 4px; margin-top: 16px;" />
+            <ui:VisualElement style="flex-grow: 0; flex-direction: row; align-items: flex-start; justify-content: flex-start; align-self: stretch; flex-shrink: 0;">
+                <ui:VisualElement name="Thumbnail" style="flex-grow: 0; flex-shrink: 0; height: 200px; width: 200px; border-top-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-bottom-left-radius: 8px; background-color: rgba(255, 255, 255, 0.08); -unity-background-scale-mode: scale-and-crop;" />
+                <ui:Button text="Select Thumbnail" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SelectThumbnailButton" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 8px; padding-top: 8px; padding-bottom: 8px; padding-right: 8px; padding-left: 8px; flex-shrink: 0; flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:Button text="Upload" parse-escape-sequences="true" display-tooltip-when-elided="true" name="UploadButton" style="margin-top: 8px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 8px; padding-bottom: 8px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="UploadAsset" style="flex-grow: 1;">
+            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DescriptionLabel" style="-unity-text-align: upper-center;" />
+            <ui:Button text="Upload" parse-escape-sequences="true" display-tooltip-when-elided="true" name="UploadButton" style="margin-top: 8px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 8px; padding-bottom: 8px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="Footer" style="flex-grow: 0; padding-right: 8px; padding-left: 8px; margin-bottom: 0; flex-direction: row; padding-top: 8px; margin-top: 0; margin-right: 0; margin-left: 0; padding-bottom: 8px;">
+        <ui:Label tabindex="-1" text="Language" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LanguageLabel" style="-unity-text-align: middle-left; margin-right: 4px;" />
+        <ui:DropdownField name="LanguageDropdown" focusable="true" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: middle-left; align-items: stretch; justify-content: flex-start; align-self: stretch; flex-direction: row; overflow: hidden; text-overflow: clip; height: auto;" />
+        <ui:VisualElement style="flex-grow: 1; height: 25px;" />
+        <ui:Button text="Logout" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LogoutButton" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 4px; padding-bottom: 4px; display: none;" />
+    </ui:VisualElement>
+</ui:UXML>

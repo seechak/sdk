@@ -15,25 +15,38 @@ namespace SEECHAK.SDK.Editor
 {
     using API = Core.API;
 
-    public class UploadAvatarEditor : EditorWindow
+    public class SDKEditor : EditorWindow
     {
         private API.Avatar.View.Avatar avatar;
         private DropdownField avatarDropdownField;
         private TextField codeTextField, avatarNameTextField;
+
+        private SubPage currentSubPage = SubPage.UploadAvatar;
         private Exception error;
-        private Label errorMessageLabel, avatarInfoLabel, thumbnailLabel, lastUpdateLabel;
-        private VisualElement errorPage, loginPage, mainPage, thumbnail;
+        private Label errorMessageLabel, avatarInfoLabel, thumbnailLabel, lastUpdateLabel, assetUploadDescriptionLabel;
+        private VisualElement errorPage, loginPage, mainPage, uploadAssetPage, uploadAvatarPage, thumbnail;
 
         private Locale locale;
         private string newThumbnailPath;
-        private Button reloadButton, loginButton, selectThumbnailButton, uploadButton, logoutButton, getLoginCodeButton;
+
+        private Button reloadButton,
+            loginButton,
+            selectThumbnailButton,
+            avatarUploadButton,
+            assetUploadButton,
+            logoutButton,
+            getLoginCodeButton,
+            showUploadAvatarButton,
+            showUploadAssetButton;
+
         private VRCAvatarDescriptor[] sceneAvatars;
         private VRCAvatarDescriptor selectedAvatar;
 
-        [MenuItem("SEECHAK/Upload Avatar")]
+        [MenuItem("SEECHAK/Show SDK Window")]
         public static void ShowWindow()
         {
-            var window = GetWindow<UploadAvatarEditor>("Upload Avatar");
+            Temp.basePath = AssetDatabase.GUIDToAssetPath("9736c2ae680c1ea4b897edbca087b5ae");
+            var window = GetWindow<SDKEditor>("SEECHAK SDK");
             window.Setup();
         }
 
@@ -54,7 +67,7 @@ namespace SEECHAK.SDK.Editor
             minSize = new Vector2(500, 550);
             maxSize = new Vector2(500, 550);
 
-            var uiAsset = Resources.Load<VisualTreeAsset>("UploadAvatarEditor");
+            var uiAsset = Resources.Load<VisualTreeAsset>("SDKEditor");
             var ui = uiAsset.Instantiate();
             rootVisualElement.Add(ui);
 
@@ -65,14 +78,20 @@ namespace SEECHAK.SDK.Editor
             errorPage = rootVisualElement.Q<VisualElement>("Error");
             loginPage = rootVisualElement.Q<VisualElement>("Login");
             mainPage = rootVisualElement.Q<VisualElement>("Main");
+            uploadAssetPage = rootVisualElement.Q<VisualElement>("UploadAsset");
+            uploadAvatarPage = rootVisualElement.Q<VisualElement>("UploadAvatar");
             thumbnail = rootVisualElement.Q<VisualElement>("Thumbnail");
 
             reloadButton = rootVisualElement.Q<Button>("ReloadButton");
             loginButton = rootVisualElement.Q<Button>("LoginButton");
             selectThumbnailButton = rootVisualElement.Q<Button>("SelectThumbnailButton");
-            uploadButton = rootVisualElement.Q<Button>("UploadButton");
+            assetUploadButton = uploadAssetPage.Q<Button>("UploadButton");
+            avatarUploadButton = uploadAvatarPage.Q<Button>("UploadButton");
+
             logoutButton = rootVisualElement.Q<Button>("LogoutButton");
             getLoginCodeButton = rootVisualElement.Q<Button>("GetLoginCodeButton");
+            showUploadAvatarButton = rootVisualElement.Q<Button>("ShowUploadAvatarButton");
+            showUploadAssetButton = rootVisualElement.Q<Button>("ShowUploadAssetButton");
 
             codeTextField = rootVisualElement.Q<TextField>("CodeTextField");
             avatarNameTextField = rootVisualElement.Q<TextField>("AvatarNameTextField");
@@ -81,6 +100,7 @@ namespace SEECHAK.SDK.Editor
             avatarInfoLabel = rootVisualElement.Q<Label>("AvatarInfoLabel");
             thumbnailLabel = rootVisualElement.Q<Label>("ThumbnailLabel");
             lastUpdateLabel = rootVisualElement.Q<Label>("LastUpdateLabel");
+            assetUploadDescriptionLabel = uploadAssetPage.Q<Label>("DescriptionLabel");
 
             avatarDropdownField = rootVisualElement.Q<DropdownField>("AvatarDropdownField");
 
@@ -123,6 +143,37 @@ namespace SEECHAK.SDK.Editor
             page.style.display = DisplayStyle.Flex;
         }
 
+        private void ShowSubPage(SubPage page)
+        {
+            uploadAssetPage.style.display = DisplayStyle.None;
+            uploadAvatarPage.style.display = DisplayStyle.None;
+            showUploadAssetButton.style.borderTopColor = Color.black * 0.33f;
+            showUploadAssetButton.style.borderBottomColor = Color.black * 0.33f;
+            showUploadAssetButton.style.borderRightColor = Color.black * 0.33f;
+            showUploadAssetButton.style.borderLeftColor = Color.black * 0.33f;
+            showUploadAvatarButton.style.borderTopColor = Color.black * 0.33f;
+            showUploadAvatarButton.style.borderBottomColor = Color.black * 0.33f;
+            showUploadAvatarButton.style.borderRightColor = Color.black * 0.33f;
+            showUploadAvatarButton.style.borderLeftColor = Color.black * 0.33f;
+
+            switch (page)
+            {
+                case SubPage.UploadAvatar:
+                    uploadAvatarPage.style.display = DisplayStyle.Flex;
+                    showUploadAvatarButton.style.borderTopColor = Color.white * 0.66f;
+                    showUploadAvatarButton.style.borderBottomColor = Color.white * 0.66f;
+                    showUploadAvatarButton.style.borderRightColor = Color.white * 0.66f;
+                    showUploadAvatarButton.style.borderLeftColor = Color.white * 0.66f;
+                    break;
+                case SubPage.UploadAsset:
+                    uploadAssetPage.style.display = DisplayStyle.Flex;
+                    showUploadAssetButton.style.borderTopColor = Color.white * 0.66f;
+                    showUploadAssetButton.style.borderBottomColor = Color.white * 0.66f;
+                    showUploadAssetButton.style.borderRightColor = Color.white * 0.66f;
+                    showUploadAssetButton.style.borderLeftColor = Color.white * 0.66f;
+                    break;
+            }
+        }
 
         private void UpdateUIState()
         {
@@ -144,8 +195,38 @@ namespace SEECHAK.SDK.Editor
                 return;
             }
 
-            ShowPage(mainPage);
             logoutButton.style.display = DisplayStyle.Flex;
+            ShowPage(mainPage);
+            ShowSubPage(currentSubPage);
+
+            switch (currentSubPage)
+            {
+                case SubPage.UploadAvatar:
+                    break;
+                case SubPage.UploadAsset:
+                    var selected = Selection.gameObjects;
+                    if (selected.Length == 0)
+                    {
+                        assetUploadDescriptionLabel.text = LL(
+                            "선택된 오브젝트가 없습니다. 업로드할 오브젝트를 선택해주세요.",
+                            "No object selected. Please select object to upload."
+                        );
+                        assetUploadButton.SetEnabled(false);
+                    }
+                    else if (selected.Length > 0)
+                    {
+                        assetUploadDescriptionLabel.text = LL(
+                            "<b>선택된 오브젝트: </b>\n",
+                            "<b>Selected Object: </b>\n"
+                        );
+                        assetUploadDescriptionLabel.text += string.Join("\n", selected.Select(e => e.name));
+                        assetUploadButton.SetEnabled(true);
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public async Task RefreshAvatar(string blueprintId)
@@ -202,7 +283,7 @@ namespace SEECHAK.SDK.Editor
             avatarNameTextField.SetEnabled(enabled);
             avatarDropdownField.SetEnabled(enabled);
             selectThumbnailButton.SetEnabled(enabled);
-            uploadButton.SetEnabled(enabled);
+            avatarUploadButton.SetEnabled(enabled);
             logoutButton.SetEnabled(enabled);
             selectThumbnailButton.SetEnabled(enabled);
         }
@@ -210,6 +291,20 @@ namespace SEECHAK.SDK.Editor
         private void SetupHandlers()
         {
             EditorApplication.hierarchyChanged += UpdateSceneAvatars;
+
+            Selection.selectionChanged += UpdateUIState;
+
+            showUploadAvatarButton.clicked += () =>
+            {
+                currentSubPage = SubPage.UploadAvatar;
+                UpdateUIState();
+            };
+
+            showUploadAssetButton.clicked += () =>
+            {
+                currentSubPage = SubPage.UploadAsset;
+                UpdateUIState();
+            };
 
             reloadButton.clicked += () =>
             {
@@ -244,7 +339,7 @@ namespace SEECHAK.SDK.Editor
                 thumbnail.style.backgroundImage = new StyleBackground(texture);
             };
 
-            uploadButton.clicked += async () =>
+            avatarUploadButton.clicked += async () =>
             {
                 try
                 {
@@ -260,7 +355,38 @@ namespace SEECHAK.SDK.Editor
                         name: avatarNameTextField.value,
                         thumbnailPath: newThumbnailPath
                     );
+
+                    EditorUtility.DisplayDialog("Success", LL(
+                        "아바타 업로드가 완료되었습니다.",
+                        "Avatar upload completed."
+                    ), "OK");
                     await RefreshAvatar(blueprintId);
+                }
+                catch (Exception e)
+                {
+                    error = e;
+                    Debug.LogError(e);
+                }
+
+                await UniTask.SwitchToMainThread();
+                SetInputEnabled(true);
+                UpdateUIState();
+            };
+
+            assetUploadButton.clicked += async () =>
+            {
+                try
+                {
+                    await UniTask.SwitchToMainThread();
+                    SetInputEnabled(false);
+
+                    var selected = Selection.gameObjects;
+                    foreach (var gameObject in selected) await UploadAsset.Upload(gameObject);
+
+                    EditorUtility.DisplayDialog("Success", LL(
+                        "에셋 파일 업로드가 완료되었습니다.",
+                        "Asset file upload completed."
+                    ), "OK");
                 }
                 catch (Exception e)
                 {
@@ -351,8 +477,11 @@ namespace SEECHAK.SDK.Editor
             L(
                 "업로드",
                 "Upload",
-                s => uploadButton.text = s
-            );
+                s =>
+                {
+                    avatarUploadButton.text = s;
+                    assetUploadButton.text = s;
+                });
 
             L(
                 "로그아웃",
@@ -399,6 +528,24 @@ namespace SEECHAK.SDK.Editor
                     lastUpdateLabel.text = s + avatar.File.UploadedAt;
                 }
             );
+
+            L(
+                "아바타 업로드",
+                "Upload Avatar",
+                s => showUploadAvatarButton.text = s
+            );
+
+            L(
+                "에셋 파일 업로드",
+                "Upload Asset File",
+                s => showUploadAssetButton.text = s
+            );
+        }
+
+        private enum SubPage
+        {
+            UploadAvatar,
+            UploadAsset
         }
     }
 }
